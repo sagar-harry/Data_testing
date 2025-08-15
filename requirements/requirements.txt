@@ -1,0 +1,1 @@
+Check that shopping cart items belong to existing products
