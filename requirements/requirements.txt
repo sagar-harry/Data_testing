@@ -1,1 +1,1 @@
-Check that shopping cart items belong to existing products
+Verify that all products have a valid category_id
