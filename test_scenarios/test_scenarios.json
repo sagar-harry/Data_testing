@@ -1,0 +1,26 @@
+{
+  "test_scenarios": [
+    {
+      "scenario_id": "TS001",
+      "scenario_name": "Test for products with invalid category_id",
+      "description": "This test scenario is designed to validate that all products have a valid category_id. The test will fail if there are any products with a category_id that does not exist in the categories table.",
+      "test_scenario": "Check if there are any products with a category_id that does not exist in the categories table.",
+      "test_query": "SELECT CASE WHEN EXISTS (SELECT 1 FROM [dbo].[products] WHERE NOT EXISTS (SELECT 1 FROM [dbo].[categories] WHERE [dbo].[products].[category_id] = [dbo].[categories].[id])) THEN 0 ELSE 1 END",
+      "validation_criteria": [
+        "The query should return 1 if all products have a valid category_id, and 0 if any product has an invalid category_id."
+      ],
+      "risk_level": "high"
+    },
+    {
+      "scenario_id": "TS002",
+      "scenario_name": "Test for products without category_id",
+      "description": "This test scenario is designed to validate that all products have a category_id. The test will fail if there are any products without a category_id.",
+      "test_scenario": "Check if there are any products without a category_id.",
+      "test_query": "SELECT CASE WHEN EXISTS (SELECT 1 FROM [dbo].[products] WHERE category_id IS NULL) THEN 0 ELSE 1 END",
+      "validation_criteria": [
+        "The query should return 1 if all products have a category_id, and 0 if any product does not have a category_id."
+      ],
+      "risk_level": "medium"
+    }
+  ]
+}

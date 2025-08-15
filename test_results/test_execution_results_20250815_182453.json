@@ -1,0 +1,35 @@
+{
+  "execution_timestamp": "2025-08-15T18:24:53.332673",
+  "database_info": {
+    "server": "localhost",
+    "database": "shopping_cart_sample",
+    "port": 1433
+  },
+  "test_results": [
+    {
+      "file_name": "test_scenarios.json",
+      "scenarios": [
+        {
+          "scenario_id": "TS001",
+          "scenario_name": "Test for products with invalid category_id",
+          "description": "This test scenario is designed to validate that all products have a valid category_id. The test will fail if there are any products with a category_id that does not exist in the categories table.",
+          "test_query": "SELECT CASE WHEN EXISTS (SELECT 1 FROM [dbo].[products] WHERE NOT EXISTS (SELECT 1 FROM [dbo].[categories] WHERE [dbo].[products].[category_id] = [dbo].[categories].[id])) THEN 0 ELSE 1 END",
+          "risk_level": "high",
+          "execution_result": 1,
+          "status": "success",
+          "error_message": null
+        },
+        {
+          "scenario_id": "TS002",
+          "scenario_name": "Test for products without category_id",
+          "description": "This test scenario is designed to validate that all products have a category_id. The test will fail if there are any products without a category_id.",
+          "test_query": "SELECT CASE WHEN EXISTS (SELECT 1 FROM [dbo].[products] WHERE category_id IS NULL) THEN 0 ELSE 1 END",
+          "risk_level": "medium",
+          "execution_result": 1,
+          "status": "success",
+          "error_message": null
+        }
+      ]
+    }
+  ]
+}
