@@ -2,114 +2,25 @@
   "test_scenarios": [
     {
       "scenario_id": "TS001",
-      "scenario_name": "Shopping Cart Item Existence",
-      "description": "Check that all items in the shopping cart belong to existing products in the product database.",
-      "test_type": "functional",
-      "priority": "high",
-      "prerequisites": [
-        "Shopping cart data",
-        "Product data"
-      ],
-      "test_steps": [
-        {
-          "step_number": 1,
-          "action": "Run SQL query to fetch all product IDs from the shopping cart table",
-          "expected_result": "List of product IDs in the shopping cart"
-        },
-        {
-          "step_number": 2,
-          "action": "Run SQL query to fetch all product IDs from the product table",
-          "expected_result": "List of all product IDs"
-        },
-        {
-          "step_number": 3,
-          "action": "Compare the two lists of product IDs",
-          "expected_result": "All product IDs in the shopping cart are found in the product table"
-        }
-      ],
-      "data_requirements": [
-        "Shopping cart data with product IDs",
-        "Product data with product IDs"
-      ],
+      "scenario_name": "Shopping Cart Item Existence Check",
+      "description": "This scenario is designed to validate that all items in the shopping cart belong to existing products in the products table.",
+      "test_scenario": "Fetch all items from the shopping cart and check if each item's product_id exists in the products table.",
+      "test_query": "SELECT CASE WHEN COUNT(*) = 0 THEN 0 ELSE 1 END FROM [dbo].[shopping_cart] WHERE [product_id] NOT IN (SELECT [id] FROM [dbo].[products]);",
       "validation_criteria": [
-        "All product IDs in the shopping cart match with product IDs in the product table"
+        "If the query returns 1, it means that all items in the shopping cart belong to existing products. If it returns 0, it means there are items in the shopping cart that do not belong to any existing product."
       ],
       "risk_level": "high"
     },
     {
       "scenario_id": "TS002",
-      "scenario_name": "Shopping Cart Item Existence Performance",
-      "description": "Check the performance of the SQL query that fetches product IDs from the shopping cart and product tables.",
-      "test_type": "performance",
-      "priority": "medium",
-      "prerequisites": [
-        "Shopping cart data",
-        "Product data"
-      ],
-      "test_steps": [
-        {
-          "step_number": 1,
-          "action": "Run SQL query to fetch all product IDs from the shopping cart table and measure its execution time",
-          "expected_result": "Execution time is within acceptable limits"
-        },
-        {
-          "step_number": 2,
-          "action": "Run SQL query to fetch all product IDs from the product table and measure its execution time",
-          "expected_result": "Execution time is within acceptable limits"
-        }
-      ],
-      "data_requirements": [
-        "Shopping cart data with product IDs",
-        "Product data with product IDs"
-      ],
+      "scenario_name": "Shopping Cart Item Quantity Check",
+      "description": "This scenario is designed to validate that the quantity of each item in the shopping cart is less than or equal to the stock of the corresponding product in the products table.",
+      "test_scenario": "Fetch all items from the shopping cart and check if the quantity of each item is less than or equal to the stock of the corresponding product.",
+      "test_query": "SELECT CASE WHEN COUNT(*) = 0 THEN 0 ELSE 1 END FROM [dbo].[shopping_cart] sc JOIN [dbo].[products] p ON sc.[product_id] = p.[id] WHERE sc.[quantity] > p.[stock];",
       "validation_criteria": [
-        "Execution time of both SQL queries is within acceptable limits"
+        "If the query returns 1, it means that the quantity of all items in the shopping cart is less than or equal to the stock of the corresponding product. If it returns 0, it means there are items in the shopping cart with quantity greater than the stock of the corresponding product."
       ],
       "risk_level": "medium"
-    },
-    {
-      "scenario_id": "TS003",
-      "scenario_name": "Shopping Cart Item Existence Security",
-      "description": "Check the security of the SQL query that fetches product IDs from the shopping cart and product tables.",
-      "test_type": "security",
-      "priority": "high",
-      "prerequisites": [
-        "Shopping cart data",
-        "Product data"
-      ],
-      "test_steps": [
-        {
-          "step_number": 1,
-          "action": "Run SQL query to fetch all product IDs from the shopping cart table with SQL injection attack",
-          "expected_result": "SQL injection attack is unsuccessful"
-        },
-        {
-          "step_number": 2,
-          "action": "Run SQL query to fetch all product IDs from the product table with SQL injection attack",
-          "expected_result": "SQL injection attack is unsuccessful"
-        }
-      ],
-      "data_requirements": [
-        "Shopping cart data with product IDs",
-        "Product data with product IDs"
-      ],
-      "validation_criteria": [
-        "SQL injection attacks are unsuccessful"
-      ],
-      "risk_level": "high"
     }
-  ],
-  "summary": {
-    "total_scenarios": 3,
-    "high_priority_count": 2,
-    "medium_priority_count": 1,
-    "low_priority_count": 0,
-    "test_types": {
-      "functional": 1,
-      "performance": 1,
-      "security": 1,
-      "data_quality": 0,
-      "integration": 0
-    }
-  }
-}      
+  ]
+}
