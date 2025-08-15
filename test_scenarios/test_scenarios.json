@@ -1,0 +1,26 @@
+{
+  "test_scenarios": [
+    {
+      "scenario_id": "TS001",
+      "scenario_name": "Product Category Validation",
+      "description": "This test scenario is designed to validate that all products have a valid category_id",
+      "test_scenario": "Check if there are any products with a category_id that does not exist in the categories table",
+      "test_query": "SELECT CASE WHEN EXISTS (SELECT 1 FROM [dbo].[products] WHERE category_id NOT IN (SELECT id FROM [dbo].[categories])) THEN 0 ELSE 1 END",
+      "validation_criteria": [
+        "The query should return 1. If it returns 0, it means there are products with invalid category_id"
+      ],
+      "risk_level": "high"
+    },
+    {
+      "scenario_id": "TS002",
+      "scenario_name": "Product Category Consistency",
+      "description": "This test scenario is designed to ensure that the category_id for a product remains consistent across all tables where it is referenced",
+      "test_scenario": "Check if the category_id for a product in the products table matches the category_id for the same product in the order_items table",
+      "test_query": "SELECT CASE WHEN EXISTS (SELECT 1 FROM [dbo].[products] p JOIN [dbo].[order_items] o ON p.id = o.product_id WHERE p.category_id != (SELECT category_id FROM [dbo].[products] WHERE id = o.product_id)) THEN 0 ELSE 1 END",
+      "validation_criteria": [
+        "The query should return 1. If it returns 0, it means there is inconsistency in product category_id across tables"
+      ],
+      "risk_level": "medium"
+    }
+  ]
+}

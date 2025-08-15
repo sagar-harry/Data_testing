@@ -1,0 +1,35 @@
+{
+  "execution_timestamp": "2025-08-15T20:44:41.529730",
+  "database_info": {
+    "server": "localhost",
+    "database": "shopping_cart_sample",
+    "port": 1433
+  },
+  "test_results": [
+    {
+      "file_name": "test_scenarios.json",
+      "scenarios": [
+        {
+          "scenario_id": "TS001",
+          "scenario_name": "Product Category Validation",
+          "description": "This test scenario is designed to validate that all products have a valid category_id",
+          "test_query": "SELECT CASE WHEN EXISTS (SELECT 1 FROM [dbo].[products] WHERE category_id NOT IN (SELECT id FROM [dbo].[categories])) THEN 0 ELSE 1 END",
+          "risk_level": "high",
+          "execution_result": 1,
+          "status": "success",
+          "error_message": null
+        },
+        {
+          "scenario_id": "TS002",
+          "scenario_name": "Product Category Consistency",
+          "description": "This test scenario is designed to ensure that the category_id for a product remains consistent across all tables where it is referenced",
+          "test_query": "SELECT CASE WHEN EXISTS (SELECT 1 FROM [dbo].[products] p JOIN [dbo].[order_items] o ON p.id = o.product_id WHERE p.category_id != (SELECT category_id FROM [dbo].[products] WHERE id = o.product_id)) THEN 0 ELSE 1 END",
+          "risk_level": "medium",
+          "execution_result": 1,
+          "status": "success",
+          "error_message": null
+        }
+      ]
+    }
+  ]
+}
