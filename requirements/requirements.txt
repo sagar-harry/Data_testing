@@ -1,5 +1,1 @@
 Verify that all products have a valid category_id
-Verify that every category_id in products exists in the categories table
-Verify that no products have a NULL value in mandatory fields (name, price)
-Verify that all foreign keys reference existing parent records
-Verify that there are no orphan records in child tables
