@@ -1,0 +1,37 @@
+{
+  "test_scenarios": [
+    {
+      "scenario_id": "TS001",
+      "scenario_name": "Data Validation for Category ID",
+      "description": "This scenario is to verify that all products have a valid category_id in the database",
+      "test_scenario": "Check if any product has an invalid or null category_id",
+      "test_query": "SELECT CASE WHEN COUNT(*) > 0 THEN 0 ELSE 1 END FROM products WHERE category_id IS NULL OR category_id NOT IN (SELECT category_id FROM categories)",
+      "validation_criteria": [
+        "If the query returns 1, the test passes. If the query returns 0, the test fails."
+      ],
+      "risk_level": "high"
+    },
+    {
+      "scenario_id": "TS002",
+      "scenario_name": "SQL Query Testing for Product and Category Relationship",
+      "description": "This scenario is to test the SQL query that retrieves all products under a specific category",
+      "test_scenario": "Retrieve all products under a specific category and verify the correctness of the result",
+      "test_query": "SELECT CASE WHEN COUNT(*) > 0 THEN 1 ELSE 0 END FROM products WHERE category_id = (SELECT category_id FROM categories WHERE category_name = 'Electronics')",
+      "validation_criteria": [
+        "If the query returns 1, the test passes. If the query returns 0, the test fails."
+      ],
+      "risk_level": "medium"
+    },
+    {
+      "scenario_id": "TS003",
+      "scenario_name": "Data Integrity Check for Category ID",
+      "description": "This scenario is to ensure the integrity of data by checking that no two products have the same category_id",
+      "test_scenario": "Check if any two products have the same category_id",
+      "test_query": "SELECT CASE WHEN COUNT(*) > 0 THEN 0 ELSE 1 END FROM (SELECT category_id, COUNT(*) as cnt FROM products GROUP BY category_id) WHERE cnt > 1",
+      "validation_criteria": [
+        "If the query returns 1, the test passes. If the query returns 0, the test fails."
+      ],
+      "risk_level": "low"
+    }
+  ]
+}

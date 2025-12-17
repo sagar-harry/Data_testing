@@ -1,0 +1,45 @@
+{
+  "execution_timestamp": "2025-12-17T16:36:17.934170",
+  "database_info": {
+    "server": "localhost",
+    "database": "shopping_cart_sample",
+    "port": 1433
+  },
+  "test_results": [
+    {
+      "file_name": "test_scenarios.json",
+      "scenarios": [
+        {
+          "scenario_id": "TS001",
+          "scenario_name": "Data Validation for Category ID",
+          "description": "This scenario is to verify that all products have a valid category_id in the database",
+          "test_query": "SELECT CASE WHEN COUNT(*) > 0 THEN 0 ELSE 1 END FROM products WHERE category_id IS NULL OR category_id NOT IN (SELECT category_id FROM categories)",
+          "risk_level": "high",
+          "execution_result": 1,
+          "status": "success",
+          "error_message": null
+        },
+        {
+          "scenario_id": "TS002",
+          "scenario_name": "SQL Query Testing for Product and Category Relationship",
+          "description": "This scenario is to test the SQL query that retrieves all products under a specific category",
+          "test_query": "SELECT CASE WHEN COUNT(*) > 0 THEN 1 ELSE 0 END FROM products WHERE category_id = (SELECT category_id FROM categories WHERE category_name = 'Electronics')",
+          "risk_level": "medium",
+          "execution_result": null,
+          "status": "failed",
+          "error_message": "('42S22', \"[42S22] [Microsoft][ODBC Driver 17 for SQL Server][SQL Server]Invalid column name 'category_name'. (207) (SQLExecDirectW)\")"
+        },
+        {
+          "scenario_id": "TS003",
+          "scenario_name": "Data Integrity Check for Category ID",
+          "description": "This scenario is to ensure the integrity of data by checking that no two products have the same category_id",
+          "test_query": "SELECT CASE WHEN COUNT(*) > 0 THEN 0 ELSE 1 END FROM (SELECT category_id, COUNT(*) as cnt FROM products GROUP BY category_id) WHERE cnt > 1",
+          "risk_level": "low",
+          "execution_result": null,
+          "status": "failed",
+          "error_message": "('42000', \"[42000] [Microsoft][ODBC Driver 17 for SQL Server][SQL Server]Incorrect syntax near the keyword 'WHERE'. (156) (SQLExecDirectW)\")"
+        }
+      ]
+    }
+  ]
+}
